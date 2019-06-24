@@ -1,0 +1,35 @@
+{% extends 'manager.html' %}
+
+{% block manage %}
+    <div class="row">
+        <table class="table">
+            <tr style="background: lightblue;">
+                <td>Order number</td>
+                <td>Customer</td>
+                <td>Phone</td>
+                <td>Type</td>
+                <td>Address</td>
+                <td>Items</td>
+                <td>Total</td>
+            </tr>
+            <tr>
+                <td>{{ order.pk }}</td>
+                <td>{{ order.user.username }}</td>
+                <td>{{ order.phone }}</td>
+                <td>{{ order.buy_type }}</td>
+                {% if order_item.address %}
+                            <td>{{ order_item.address }}</td>
+                        {% else %}
+                            <td> none </td>
+                        {% endif %}
+                <td>
+                    {% for items in order.items.get_cart_items %}
+                        <p>{{ items.product }}:{{ items.quantity }}</p>
+                    {% endfor %}
+                </td>
+                <td>{{ order.items.get_cart_total }}</td>
+            </tr>
+        </table>
+        <p class="text-center"><a href="{% url 'order_process' order.pk %}"><button class="btn btn-primary">Ready</button></a></p>
+    </div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    {% if cart.get_cart_items %}
+    <div id="empty">
+        <h3 class="text-center h3">Your cart</h3>
+    </br>
+    <table class="table">
+        <tr style="background: lightblue;">
+            <td class="text-center">Product</td>
+            <td class="text-center">Quantity</td>
+            <td class="text-center">Price</td>
+            <td class="text-center"></td>
+        </tr>
+        {% for cart_item in cart.get_cart_items %}
+            <tr class="cart_item_{{ cart_item.pk }} text-center">
+                <td>{{ cart_item.product.title }}</td>
+                <td>
+                    <form method="get" action="">
+                        <input id="{{ cart_item.pk }}" class="cart_item_quantity" type="number" name="quantity" min="1" value="{{ cart_item.quantity }}" style="width: 50px">
+                    </form>
+                </td>
+                <td id="item_price_{{ cart_item.pk }}">{{ cart_item.cart_item_price }}</td>
+                <td><button type="submit" id="{{ cart_item.pk }}" class="remove_from_cart btn btn-default">Remove from cart</button></td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center">Total</td>
+            <td id="cart_total" class="text-center">{{ cart.get_cart_total }}</td>
+        </tr>
+    </table>
+    <a href="{% url 'checkout' %}"><button class="btn btn-primary pull-right">Continue</button></a>
+    </div>
+    {% else %}
+    <h3 class="text-center">Your cart is empty.</h3>
+    {% endif %}
+    <h3 id="cart_empty" class="text-center"></h3>
+{% endblock %}

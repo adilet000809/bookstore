@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Book store</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/shop-homepage.css' %}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">Book store company</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                    <li><a><p>Hello, {{ user.username }}</p></a></li>
+                    {% endif %}
+                    {% if not user.is_authenticated %}
+                    <li><a href="{% url 'login_view' %}">Login/Register</a></li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'sign_out' %}">Sign out</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <div class="container">
+        {% block manage %}
+            <div class="row">
+                {% if order %}
+                    <table class="table">
+                <tr style="background: lightblue;">
+                    <td>Order number</td>
+                    <td>Customer</td>
+                    <td>Phone</td>
+                    <td>Type</td>
+                    <td>Address</td>
+                    <td>Status</td>
+                </tr>
+                {% for order_item in order %}
+                    <tr>
+                        <td>{{ order_item.pk }}</td>
+                        <td>{{ order_item.user.username }}</td>
+                        <td>{{ order_item.phone }}</td>
+                        <td>{{ order_item.buy_type }}</td>
+                        {% if order_item.address %}
+                            <td>{{ order_item.address }}</td>
+                        {% else %}
+                            <td> none </td>
+                        {% endif %}
+                        <td><a href="{{ order_item.get_absolute_url }}"><button class="btn btn-default">Process</button></a></td>
+                        <td>{{ order_item.status }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+                 {% else %}
+                    <h2 class="text-center h2">No orders</h2>
+                {% endif %}
+            </div>
+        {% endblock %}
+    </div>
+</body>
+</html>

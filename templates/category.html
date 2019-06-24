@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+    <div class="col-sm-12">
+        <p class="cart_response"></p>
+        <h2>{{ category.name }}</h2>
+        <hr/>
+        {% for product in products_of_category %}
+            <div class="col-sm-4">
+                <img src="{{ product.image.url }}" style="width: 100%; height: 350px;">
+                <h4 class="text-center">{{ product.title }}</h4>
+                <p class="text-center">Price: <strong>{{ product.price }} tg</strong></p>
+                {% if user.is_authenticated %}
+                    <p class="text-center">
+                    <button type="submit" id="{{ product.slug }}" class="cart btn btn-danger">Add to cart</button>
+                    </p>
+                {% else %}
+                    <p class="text-center">Only authorized or registered users can add to cart. Please
+                        <a href="{% url 'login_view' %}">login/register</a>
+                    </p>
+                {% endif %}
+            </div>
+            <hr/>
+        {% endfor %}
+    </div>
+
+{% endblock %}

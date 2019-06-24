@@ -1,0 +1,58 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <h3 class="h3 text-center">Account of user {{ user.username }}</h3>
+    <hr>
+    <table class="table">
+        <tr style="background: lightblue;">
+            <td>No.order</td>
+            <td>Date</td>
+            <td>Status</td>
+            <td>Total</td>
+            <td>Confirm receipt</td>
+        </tr>
+        {% for order_item in order %}
+            <tr>
+                <td>{{ order_item.pk }}</td>
+                <td>{{ order_item.date }}</td>
+                <td>{{ order_item.status }}</td>
+                <td>{{ order_item.items.get_cart_total }}</td>
+                {% if order_item.status == 'Waiting for the recipient' %}
+                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-{{ order_item.pk }}">Confirm</button></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+
+<!-- Modal -->
+    {% for order_item in order %}
+    <div class="modal fade" id="myModal-{{ order_item.pk }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Confirmation of order #{{ order_item.pk }}</h4>
+          </div>
+          <div class="modal-body">
+              <table class="table">
+                <tr style="background: lightblue;">
+                    <td>Product</td>
+                    <td>Quantity</td>
+                </tr>
+                  {% for item in order_item.items.cartitem_set.all %}
+                      <tr>
+                          <td>{{ item.product }}</td>
+                          <td>{{ item.quantity }}</td>
+                      </tr>
+                  {% endfor %}
+              </table>
+          </div>
+          <div class="modal-footer">
+            <a href="{% url 'confirm_order' order_item.pk %}" type="button" class="btn btn-primary">Confirm receipt</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}
