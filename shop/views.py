@@ -155,7 +155,7 @@ def cart_view(request):
 # A function to handle adding items to cart
 @login_required()
 def add_to_cart_view(request):
-    # Handling AJAX request from cilent
+    # Handling AJAX request from client
     if request.is_ajax():
         user = request.user
         product = Product.objects.get(slug=request.GET['product_slug'])
